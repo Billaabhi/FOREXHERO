@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Forex Intelligence Constitution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<style>
+  :root{
+    --ink:#0b0d10;
+    --ink-2:#13161b;
+    --ink-3:#1a1e25;
+    --paper:#ece4d3;
+    --rule:#2a2f36;
+    --rule-light:#363c45;
+    --amber:#c9a227;
+    --sage:#6f9683;
+    --brick:#a3564a;
+    --ghost:#6b7280;
+    --steel:#7a93a6;
+    --text:#e8e2d4;
+    --text-dim:#8d8879;
+    --serif:'Libre Baskerville', Georgia, serif;
+    --mono:'JetBrains Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);line-height:1.5;}
+  ::selection{background:var(--amber);color:var(--ink);}
+
+  /* ---- Header / Case File ---- */
+  header.casefile{
+    border-bottom:3px double var(--amber);
+    padding:18px 28px;
+    display:flex;flex-wrap:wrap;align-items:center;gap:18px;justify-content:space-between;
+    background:linear-gradient(180deg,var(--ink-2),var(--ink));
+  }
+  .brand{display:flex;flex-direction:column;gap:2px;}
+  .brand .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--amber);text-transform:uppercase;}
+  .brand h1{font-family:var(--serif);font-size:22px;margin:0;font-weight:700;color:var(--paper);}
+  .filebar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
+  select, input[type=text], input[type=number], textarea{
+    background:var(--ink-3);border:1px solid var(--rule-light);color:var(--text);
+    font-family:var(--mono);font-size:13px;padding:7px 10px;border-radius:2px;
+  }
+  select:focus, input:focus, textarea:focus{outline:1px solid var(--amber);}
+  button{
+    font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--ink-3);color:var(--paper);border:1px solid var(--rule-light);
+    padding:9px 16px;border-radius:2px;cursor:pointer;transition:.15s;
+  }
+  button:hover{border-color:var(--amber);color:var(--amber);}
+  button.primary{background:var(--amber);color:var(--ink);border-color:var(--amber);font-weight:700;}
+  button.primary:hover{background:#e0b62e;color:var(--ink);}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  .ticker{font-family:var(--mono);font-size:20px;color:var(--paper);font-weight:500;}
+  .ticker .delta{font-size:12px;margin-left:8px;}
+  .delta.up{color:var(--sage);} .delta.down{color:var(--brick);}
+
+  /* ---- Layout ---- */
+  .layout{display:grid;grid-template-columns:1fr 380px;gap:0;align-items:start;}
+  main.articles{padding:24px 28px;min-width:0;}
+  aside.sidebar{padding:24px 20px;border-left:1px solid var(--rule);position:sticky;top:0;max-height:100vh;overflow-y:auto;}
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr;}
+    aside.sidebar{border-left:none;border-top:3px double var(--amber);position:static;max-height:none;}
+  }
+
+  .article-head{margin:34px 0 14px;}
+  .article-head:first-child{margin-top:0;}
+  .article-head .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--amber);}
+  .article-head h2{font-family:var(--serif);font-size:19px;margin:4px 0 0;color:var(--paper);font-weight:700;}
+  .article-head .rule{border:none;border-top:1px solid var(--rule);margin-top:10px;}
+
+  .skillgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+
+  .card{
+    background:var(--ink-2);border:1px solid var(--rule);border-left:3px solid var(--ghost);
+    padding:16px;border-radius:2px;display:flex;flex-direction:column;gap:10px;
+  }
+  .card.status-ok{border-left-color:var(--sage);}
+  .card.status-low{border-left-color:var(--amber);}
+  .card.status-insufficient{border-left-color:var(--ghost);}
+  .card.status-error{border-left-color:var(--brick);}
+  .card.status-measured{border-left-color:var(--steel);}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .card-top h3{font-family:var(--serif);font-size:15px;margin:0;color:var(--paper);}
+  .badge{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:3px 7px;border-radius:2px;white-space:nowrap;text-transform:uppercase;}
+  .badge.ok{background:rgba(111,150,131,.18);color:var(--sage);}
+  .badge.insufficient{background:rgba(107,114,128,.18);color:var(--ghost);}
+  .badge.error{background:rgba(163,86,74,.18);color:var(--brick);}
+  .badge.measured{background:rgba(122,147,166,.2);color:var(--steel);}
+  .claim{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--paper);line-height:1.45;}
+  .evidence{font-size:12px;}
+  .evidence .lbl{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+  .evidence ul{margin:0 0 8px;padding-left:16px;color:var(--text-dim);}
+  .evidence ul.contra li{color:#bf8c84;}
+  .confbar-wrap{display:flex;align-items:center;gap:8px;}
+  .confbar{flex:1;height:6px;background:var(--ink-3);border-radius:3px;overflow:hidden;}
+  .confbar > div{height:100%;background:var(--amber);}
+  .confnum{font-family:var(--mono);font-size:13px;color:var(--paper);min-width:34px;text-align:right;}
+  .reason{font-size:11px;color:var(--text-dim);font-style:italic;}
+  .manual-input{display:flex;flex-direction:column;gap:6px;}
+  .manual-input textarea{width:100%;min-height:54px;resize:vertical;font-size:12px;}
+  .run-one{align-self:flex-start;}
+  .placeholder-note{font-size:11px;color:var(--ghost);font-family:var(--mono);}
+
+  /* ---- Sidebar panels ---- */
+  .panel{background:var(--ink-2);border:1px solid var(--rule);padding:16px;border-radius:2px;margin-bottom:18px;}
+  .panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 12px;}
+  .stamp-area{position:relative;min-height:120px;display:flex;align-items:center;justify-content:center;padding:10px 0;}
+  .stamp{
+    border:3px double var(--ghost);color:var(--ghost);
+    font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    padding:14px 16px;text-align:center;transform:rotate(-5deg);border-radius:4px;font-size:13px;line-height:1.4;
+  }
+  .stamp.high{border-color:var(--sage);color:var(--sage);}
+  .stamp.moderate{border-color:var(--amber);color:var(--amber);}
+  .stamp.low{border-color:var(--brick);color:var(--brick);}
+  .scorelist{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:10px;}
+  .scorelist div{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--rule);}
+  .warning-banner{background:rgba(163,86,74,.15);border:1px solid var(--brick);color:#d4a59c;font-size:12px;padding:10px;border-radius:2px;margin-top:10px;font-family:var(--mono);}
+
+  .formrow{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+  .formrow label{font-size:11px;color:var(--text-dim);font-family:var(--mono);}
+  .inline2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .result-line{font-family:var(--mono);font-size:13px;color:var(--paper);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule);}
+  .psy-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+  .psy-buttons button{flex:1;min-width:70px;}
+  .psy-buttons button.active{background:var(--amber);color:var(--ink);border-color:var(--amber);}
+
+  table.ledger{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-top:10px;}
+  table.ledger th, table.ledger td{padding:5px 4px;border-bottom:1px solid var(--rule);text-align:left;}
+  table.ledger th{color:var(--text-dim);font-weight:500;}
+  .win{color:var(--sage);} .loss{color:var(--brick);}
+  .small-x{cursor:pointer;color:var(--ghost);font-size:11px;}
+  .small-x:hover{color:var(--brick);}
+
+  .guardrails{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);line-height:1.7;}
+  .guardrails li{margin-bottom:4px;}
+  footer{padding:24px 28px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;color:var(--ghost);text-align:center;}
+</style>
+</head>
+<body>
+
+<header class="casefile">
+  <div class="brand">
+    <span class="eyebrow">An evidentiary system — not a signal generator</span>
+    <h1>The Forex Intelligence Constitution</h1>
+  </div>
+  <div class="filebar">
+    <span id="fileNo">FILE NO. —</span>
+    <select id="pairSelect">
+      <option value="EUR/USD">EUR / USD</option>
+      <option value="GBP/USD">GBP / USD</option>
+      <option value="USD/JPY">USD / JPY</option>
+      <option value="AUD/USD">AUD / USD</option>
+      <option value="USD/CHF">USD / CHF</option>
+      <option value="USD/CAD">USD / CAD</option>
+      <option value="NZD/USD">NZD / USD</option>
+      <option value="EUR/GBP">EUR / GBP</option>
+      <option value="EUR/JPY">EUR / JPY</option>
+      <option value="GBP/JPY">GBP / JPY</option>
+      <option value="XAU/USD">Gold (XAU / USD)</option>
+    </select>
+    <input type="text" id="goldApiKey" placeholder="Twelve Data key (Gold + Intermarket)" title="Free key at twelvedata.com — 800 requests/day, stored only in this session, never saved. Also auto-feeds the Intermarket Analyst with DXY/Gold data." style="width:230px;">
+    <input type="text" id="finnhubKey" placeholder="Finnhub key (economic calendar)" title="Free key at finnhub.io. Auto-feeds the Macro Economist with scheduled high-impact events. Free-tier access to this endpoint is not guaranteed — check it actually works after fetching." style="width:220px;">
+    <button id="fetchBtn">Fetch Live Data</button>
+    <span class="ticker" id="ticker">— · —</span>
+  </div>
+  <div id="marketDataStatus" class="placeholder-note" style="width:100%;padding:0 28px;"></div>
+  <div style="display:flex;gap:10px;">
+    <button id="runAllBtn" class="primary">Run Full Analysis</button>
+    <button id="resetBtn">Reset Session</button>
+  </div>
+</header>
+
+<section style="padding:18px 28px 0;">
+  <div class="tradingview-widget-container" style="height:420px;border:1px solid var(--rule);border-radius:2px;overflow:hidden;">
+    <div id="tv_chart_widget" style="height:100%;"></div>
+  </div>
+  <div class="placeholder-note" style="padding:6px 2px;">Live chart via TradingView — visual reference only. Not connected to the analysis engine below; the specialists still reason off the price series and notes you give them.</div>
+</section>
+
+<div class="layout">
+  <main class="articles" id="articles"></main>
+
+  <aside class="sidebar">
+
+    <div class="panel">
+      <h3>The Last Word</h3>
+      <div class="stamp-area"><div class="stamp" id="lastWord">RUN ANALYSIS<br>FIRST</div></div>
+      <div class="reason" id="lastWordReason">Combines framework count, alignment, conviction score, and your trade history into one plain readout — computed in code, not asked of the model. This still never tells you to buy or sell; it tells you whether conditions support considering a trade at all.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Trade Plan</h3>
+      <div id="tradePlan" class="reason">Run analysis to compile a plan — only appears when conditions are at least borderline. This is a summary of what the evidence says, not an instruction. You decide whether to act, and at what size.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Pre-Trade Checklist</h3>
+      <div id="checklist" class="reason">What an experienced trader checks before any entry — computed from your actual session, not self-reported.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Article VII — Conviction Engine (detail)</h3>
+      <div class="stamp-area"><div class="stamp" id="stamp">NO ANALYSIS<br>RUN YET</div></div>
+      <div class="scorelist" id="scoreList"></div>
+      <div id="overrideWarning"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Article VI — Market Memory</h3>
+      <div id="memoryNote" class="reason">Run analysis to record a session snapshot.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Risk Manager (deterministic)</h3>
+      <div class="inline2">
+        <div class="formrow"><label>Account size ($)</label><input type="number" id="riskAccount" value="10000"></div>
+        <div class="formrow"><label>Risk per trade (%)</label><input type="number" id="riskPct" value="1"></div>
+      </div>
+      <div class="formrow"><label>Stop distance (pips)</label><input type="number" id="riskPips" value="20"></div>
+      <button id="riskCalcBtn">Calculate</button>
+      <div class="result-line" id="riskResult">—</div>
+      <div class="placeholder-note">Approximate $10/pip per standard lot. Verify with your broker before sizing.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Article V — Psychology Check-in</h3>
+      <div class="psy-buttons" id="psyButtons">
+        <button data-state="calm">Calm</button>
+        <button data-state="fomo">FOMO</button>
+        <button data-state="revenge">Revenge</button>
+        <button data-state="tilt">Tilt</button>
+        <button data-state="fear">Fear</button>
+      </div>
+      <textarea id="psyNote" placeholder="Optional note on your current state..."></textarea>
+      <div class="result-line" id="psyResult">Select a state to check in.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Trade Memory Ledger</h3>
+      <div class="inline2">
+        <div class="formrow"><label>Direction</label>
+          <select id="tDir"><option>Long</option><option>Short</option></select>
+        </div>
+        <div class="formrow"><label>Outcome</label>
+          <select id="tOutcome"><option>Win</option><option>Loss</option><option>Breakeven</option></select>
+        </div>
+      </div>
+      <div class="inline2">
+        <div class="formrow"><label>Session</label>
+          <select id="tSession"><option>Asian</option><option>London</option><option>New York</option><option>Overlap</option></select>
+        </div>
+        <div class="formrow"><label>R-multiple</label><input type="number" step="0.1" id="tR" value="1"></div>
+        <div class="formrow"><label>Result ($)</label><input type="number" step="0.01" id="tPnl" placeholder="actual $ P&L"></div>
+      </div>
+      <div class="formrow"><label>Setup tag</label><input type="text" id="tSetup" placeholder="e.g. FVG retest, range fade"></div>
+      <button id="addTradeBtn">Log Trade</button>
+      <table class="ledger" id="ledgerTable"></table>
+    </div>
+
+    <div class="panel">
+      <h3>Daily Risk Budget</h3>
+      <div class="inline2">
+        <div class="formrow"><label>Account size ($)</label><input type="number" id="ddAccount" value="10000"></div>
+        <div class="formrow"><label>Daily loss limit (%)</label><input type="number" step="0.5" id="ddDailyLimit" value="5"></div>
+      </div>
+      <div class="formrow"><label>Max overall drawdown (%)</label><input type="number" step="0.5" id="ddMaxLimit" value="10"></div>
+      <button id="ddCheckBtn">Check Budget</button>
+      <div class="result-line" id="ddResult">Log trades with a $ result to track this.</div>
+      <div class="placeholder-note">Cumulative P&L is a simple running sum of logged trades, not true peak-to-trough drawdown — a reasonable proxy, not exact challenge accounting. Trades logged before this field existed won't count toward it.</div>
+
+    <div class="panel">
+      <h3>The Five Guardrails</h3>
+      <ul class="guardrails">
+        <li>1. Never produce certainty — evidence favors, never "this will work."</li>
+        <li>2. No hidden reasoning — every claim carries evidence.</li>
+        <li>3. No framework contamination — specialists reason independently.</li>
+        <li>4. No signal without minimum 3-framework agreement — enforced in code.</li>
+        <li>5. Trader override detection — flags setups against your own history.</li>
+      </ul>
+    </div>
+
+  </aside>
+</div>
+
+<footer>Built on the Forex Intelligence Constitution · Reasoning via Claude · Price reference: Frankfurter / ECB (daily, not intraday) · Not financial advice</footer>
+
+<script>
+const ANTHROPIC_ENDPOINT = '/api/claude';
+const MODEL = 'claude-sonnet-4-6';
+
+const CONSTITUTION_PREFIX = `You are one independent specialist module inside a forex reasoning system bound by a strict constitution:
+1. Never state certainty. No "will happen", no "buy/sell" instructions. Use evidence-favors language only.
+2. Output ONLY valid JSON. No prose, no markdown fences, no commentary outside the JSON object.
+3. You must NOT reference or borrow conclusions from other trading frameworks. Reason only within your own specialty, using only the data given to you.
+4. If the data given is insufficient to form a claim, set status to "insufficient_data", leave claim as an empty string, and omit confidence and bias.
+5. confidence is an integer 0-100 reflecting strength of evidence, mandatory unless status is "insufficient_data".
+6. bias is your specialty's directional lean from the evidence alone — "bullish", "bearish", or "neutral". This is a structured data point for aggregation, not an instruction to trade. Required whenever status is "ok".
+Required JSON schema: {"status":"ok"|"insufficient_data","claim":string,"bias":"bullish"|"bearish"|"neutral","supporting_evidence":string[],"contradicting_evidence":string[],"confidence":number,"reason":string,"key_level":number|null,"level_label":string|null,"trigger_condition":string|null}
+key_level/level_label are optional — only populate them if your specialty naturally produces a specific price level (e.g. a zone boundary, FVG edge, POC). Otherwise set both to null.
+trigger_condition is optional — a specific, observable confirmation to wait for (e.g. "a 4H close back above the FVG" or "a retest that holds with a bullish engulfing candle"), not a vague restatement of the claim. Only populate it if your specialty naturally produces this kind of structural trigger. This is still evidence description, not an instruction — phrase it as "would confirm," never "enter when."`;
+
+const ARTICLES = [
+  {label:'ARTICLE I', title:'Strategic Layer', skills:['macro','intermarket']},
+  {label:'ARTICLE II', title:'Market Structure Layer', skills:['ict','priceaction','supplydemand']},
+  {label:'ARTICLE III', title:'Flow Layer', skills:['orderflow','volumeprofile','marketprofile']},
+  {label:'ARTICLE IV', title:'Probability Layer', skills:['statistical','regime']},
+  {label:'ARTICLE V', title:'Trader Layer', skills:['personaledge']},
+];
+
+const SKILLS = {
+  macro: {title:'Macro Economist', mode:'manual', role:'You are the Macro Economist. You reason about central bank policy (Fed, ECB, BOE, BOJ), inflation, employment, GDP and bond markets, using only the notes the trader gives you plus your general macroeconomic knowledge as of your training. Do not discuss chart patterns or order flow.', placeholder:'Recent macro data/events you know of (CPI, NFP, rate decisions, central bank tone)...'},
+  intermarket: {title:'Intermarket Analyst', mode:'manual', role:'You are the Intermarket Analyst. You reason only about relationships between DXY, Gold, Bonds, Oil and Indices and what they imply for this currency pair, using only the notes given. Do not discuss macro calendar events or chart structure.', placeholder:'DXY / Gold / Bonds / Oil context you have...'},
+  ict: {title:'ICT Expert', mode:'manual', role:'You are the ICT / Smart Money Concepts Expert. You reason only about liquidity, fair value gaps, order blocks, break of structure, change of character, and kill zones, using only the intraday data or notes given. Do not discuss macro or volume profile. If a specific FVG, order block, or liquidity level is identifiable from the notes, populate key_level with its most relevant price and level_label with a short description (e.g. "FVG support"). If there is a specific structural confirmation that would validate the setup (e.g. a close back above a level, a liquidity sweep followed by reclaim), populate trigger_condition. Otherwise leave these null.', placeholder:'Optional — additional liquidity sweeps, order blocks, kill zone notes. If a Twelve Data key is entered, real swing levels and FVGs are auto-detected from 1H candles already.'},
+  priceaction: {title:'Price Action Expert', mode:'auto', role:'You are the Price Action Expert. You reason only about trend, range, breakout and retest behaviour using the daily price series statistics given. Do not discuss order flow or macro. If there is a specific price-action confirmation that would validate continuation (e.g. a higher low holding, a breakout retest), populate trigger_condition. Otherwise leave it null.'},
+  supplydemand: {title:'Supply & Demand Expert', mode:'auto', role:'You are the Supply & Demand Expert. You reason only about zones, imbalances and freshness of swing highs/lows using the daily price series statistics given. Do not discuss ICT terminology or macro. Populate key_level with the most relevant zone boundary price (e.g. the swing low/high given in the stats) and level_label with a short description (e.g. "demand zone low"). Otherwise leave both null.'},
+  orderflow: {title:'Order Flow Expert', mode:'manual', role:'You are the Order Flow Expert. You reason only about footprint, delta and absorption using the notes given. Do not discuss anything you were not given evidence for.', placeholder:'Footprint / delta / absorption notes...'},
+  volumeprofile: {title:'Volume Profile Expert', mode:'manual', role:'You are the Volume Profile Expert. You reason only about Point of Control, High Volume Nodes and Low Volume Nodes using the notes given.', placeholder:'POC / HVN / LVN levels if known...'},
+  marketprofile: {title:'Market Profile Expert', mode:'manual', role:'You are the Market Profile Expert. You reason only about auction theory, acceptance and rejection using the notes given.', placeholder:'Auction acceptance/rejection notes...'},
+  statistical: {title:'Statistical Analyst', mode:'auto', role:'You are the Statistical Analyst. You reason only about volatility and dispersion statistics from the daily price series given, framed as probability, not prediction.'},
+  regime: {title:'Regime Detector', mode:'auto', role:'You are the Regime Detector. You classify the current regime as trend, range, expansion or compression based purely on the volatility and directional statistics given.'},
+  personaledge: {title:'Personal Edge Engine', mode:'history', role:"You are the Personal Edge Engine. You reason only about the trader's own historical performance statistics given (by pair, session, setup) to identify their genuine edge or lack of one. Do not discuss the current chart."},
+};
+
+// SPECIALIST WEIGHTS — encodes a trader-blend philosophy (ICT/SMC entries +
+// Brooks price action + Dennis/Turtle trend discipline) into the bias vote.
+// Hougaard's "patience, avoid over-analysis" and Douglas's psychology are
+// deliberately NOT vote weights here — they aren't evidence about the market,
+// they're filters on how strict the decision gate is. See the Last Word logic
+// in runConviction for where those two actually apply.
+const SPECIALIST_WEIGHTS = {
+  ict: 25, orderflow: 8, supplydemand: 7,      // ICT/SMC liquidity cluster — 40
+  priceaction: 20,                              // Brooks price action — 20
+  regime: 5,                                    // Dennis/Turtle trend filter — 5
+  macro: 8, intermarket: 6, volumeprofile: 9, marketprofile: 6, statistical: 6  // confirmation layer — 35
+};
+const WEIGHTED_MET_CONVICTION = 70;   // Hougaard bar: stricter than the old 65
+const WEIGHTED_MET_AGREEMENT = 0.65;  // 65%+ of weighted votes must agree on direction
+
+function computeWeightedBias(okSkills){
+  let bullishW = 0, bearishW = 0, neutralW = 0;
+  const contributors = [];
+  okSkills.forEach(([k,v])=>{
+    const w = SPECIALIST_WEIGHTS[k];
+    if(w === undefined) return; // not a market-voting specialist (e.g. personaledge)
+    if(v.bias === 'bullish'){ bullishW += w; contributors.push({title: SKILLS[k].title, w, bias:'bullish'}); }
+    else if(v.bias === 'bearish'){ bearishW += w; contributors.push({title: SKILLS[k].title, w, bias:'bearish'}); }
+    else { neutralW += w; contributors.push({title: SKILLS[k].title, w, bias:'neutral'}); }
+  });
+  const totalW = bullishW + bearishW + neutralW;
+  const dominant = bullishW >= bearishW ? 'bullish' : 'bearish';
+  const dominantWeight = Math.max(bullishW, bearishW);
+  const dominantShare = totalW > 0 ? dominantWeight / totalW : 0;
+  return { bullishW, bearishW, neutralW, totalW, dominant, dominantShare, contributors };
+}
+
+let STATE = {
+  pair: 'EUR/USD',
+  series: null,        // {closes:[{date,value}], stats:{...}}
+  latest: null,         // {value, date}
+  skills: {},            // key -> {status, claim, supporting_evidence, contradicting_evidence, confidence, reason, loading}
+  trades: [],
+  psyState: null,
+  riskCalculated: false,
+  calendarSummary: '',
+  intermarketSummary: '',
+};
+
+// ---------- storage helpers (browser localStorage — single device only) ----------
+async function storeGet(key){
+  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+  catch(e){ return null; }
+}
+async function storeSet(key, val){
+  try{ localStorage.setItem(key, JSON.stringify(val)); }
+  catch(e){ console.error('storage set failed', e); }
+}
+
+// ---------- Claude call ----------
+async function callClaude(systemPrompt, userPrompt, maxTokens=700){
+  try{
+    const res = await fetch(ANTHROPIC_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: maxTokens,
+        system: systemPrompt,
+        messages: [{role:'user', content: userPrompt}]
+      })
+    });
+    const data = await res.json();
+    const textBlock = (data.content||[]).find(b => b.type === 'text');
+    let raw = textBlock ? textBlock.text : '';
+    raw = raw.replace(/```json|```/g,'').trim();
+    return JSON.parse(raw);
+  }catch(e){
+    return {status:'error', reason: 'Call or parse failed: ' + e.message};
+  }
+}
+
+// ---------- live data ----------
+function pad(n){return n<10?'0'+n:''+n;}
+function fmtDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+
+function computeStats(closes, base, quote){
+  // Daily-resolution stats — Frankfurter fallback path, close-only (no OHLC available).
+  const values = closes.map(c=>c.value);
+  const n = values.length;
+  const first = values[0], last = values[n-1];
+  const high = Math.max(...values), low = Math.min(...values);
+  const pctChange = ((last-first)/first*100);
+  const returns = [];
+  for(let i=1;i<n;i++) returns.push((values[i]-values[i-1])/values[i-1]);
+  const meanRet = returns.reduce((a,b)=>a+b,0)/returns.length;
+  const variance = returns.reduce((a,b)=>a+Math.pow(b-meanRet,2),0)/returns.length;
+  const stdev = Math.sqrt(variance);
+  const recent10 = values.slice(-10);
+  const swingHigh = Math.max(...recent10), swingLow = Math.min(...recent10);
+  let upDays=0, downDays=0;
+  for(let i=1;i<n;i++){ if(values[i]>values[i-1]) upDays++; else if(values[i]<values[i-1]) downDays++; }
+  return { resolution:'daily', n, first, last, high, low, pctChange, stdevPct: stdev*100, swingHigh, swingLow, upDays, downDays, base, quote };
+}
+
+function computeIntradayStats(candles, pair){
+  // 1H-resolution stats — Twelve Data path. Uses real OHLC, not just closes, so
+  // it can compute an actual swing high/low and scan for a real 3-candle fair
+  // value gap instead of requiring the trader to type one in by hand.
+  const [base, quote] = pair.split('/');
+  const closes = candles.map(c=>c.close);
+  const n = closes.length;
+  const first = closes[0], last = closes[n-1];
+  const high = Math.max(...candles.map(c=>c.high)), low = Math.min(...candles.map(c=>c.low));
+  const pctChange = ((last-first)/first*100);
+  const returns = [];
+  for(let i=1;i<n;i++) returns.push((closes[i]-closes[i-1])/closes[i-1]);
+  const meanRet = returns.reduce((a,b)=>a+b,0)/returns.length;
+  const variance = returns.reduce((a,b)=>a+Math.pow(b-meanRet,2),0)/returns.length;
+  const stdev = Math.sqrt(variance);
+
+  const recentN = Math.min(24, n); // ~last day of 1H candles
+  const recentCandles = candles.slice(-recentN);
+  const swingHigh = Math.max(...recentCandles.map(c=>c.high));
+  const swingLow = Math.min(...recentCandles.map(c=>c.low));
+
+  let upPeriods=0, downPeriods=0;
+  for(let i=1;i<n;i++){ if(closes[i]>closes[i-1]) upPeriods++; else if(closes[i]<closes[i-1]) downPeriods++; }
+
+  // Simple 3-candle FVG scan, most recent first, over the last ~40 candles.
+  let fvg = null;
+  const scanStart = Math.max(2, n-40);
+  for(let i=n-1; i>=scanStart; i--){
+    const c1 = candles[i-2], c3 = candles[i];
+    if(!c1 || !c3) continue;
+    if(c1.high < c3.low){ fvg = {type:'bullish', top: c3.low, bottom: c1.high, at: c3.date}; break; }
+    if(c1.low > c3.high){ fvg = {type:'bearish', top: c1.low, bottom: c3.high, at: c3.date}; break; }
+  }
+
+  return { resolution:'intraday_1h', n, first, last, high, low, pctChange, stdevPct: stdev*100, swingHigh, swingLow, upPeriods, downPeriods, fvg, base, quote };
+}
+
+async function fetchLiveData(pair){
+  const ticker = document.getElementById('ticker');
+  ticker.textContent = 'FETCHING…';
+  const tdKey = document.getElementById('goldApiKey').value.trim();
+
+  if(tdKey){
+    // Twelve Data intraday path — works for any pair, including Gold, since
+    // Twelve Data accepts the same 'EUR/USD'-style symbol format throughout.
+    try{
+      const res = await fetch(`https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(pair)}&interval=1h&outputsize=100&apikey=${encodeURIComponent(tdKey)}`);
+      const data = await res.json();
+      if(data.status === 'error' || !data.values) throw new Error(data.message || 'Twelve Data returned no candles');
+
+      const candles = data.values.slice().reverse().map(v => ({
+        date: v.datetime, open: parseFloat(v.open), high: parseFloat(v.high), low: parseFloat(v.low), close: parseFloat(v.close)
+      }));
+      STATE.series = { closes: candles.map(c=>({date:c.date, value:c.close})), candles, stats: computeIntradayStats(candles, pair) };
+      STATE.latest = { value: candles[candles.length-1].close, date: candles[candles.length-1].date };
+
+      const pctChange = STATE.series.stats.pctChange;
+      const dirClass = pctChange >= 0 ? 'up' : 'down';
+      const arrow = pctChange >= 0 ? '▲' : '▼';
+      const [base, quote] = pair.split('/');
+      const decimals = quote === 'JPY' ? 3 : (pair === 'XAU/USD' ? 2 : 5);
+      ticker.innerHTML = `${STATE.latest.value.toFixed(decimals)} <span class="delta ${dirClass}">${arrow} ${pctChange.toFixed(2)}% / ${STATE.series.stats.n}h</span> <span style="color:var(--steel);font-size:11px;">INTRADAY</span>`;
+      document.getElementById('fileNo').textContent = `FILE NO. ${base}${quote} · ${fmtDate(new Date())} · 1H`;
+      return;
+    }catch(e){
+      if(pair === 'XAU/USD'){
+        ticker.textContent = 'GOLD FEED ERROR — check your Twelve Data key';
+        STATE.series = null; STATE.latest = null;
+        return;
+      }
+      ticker.textContent = 'INTRADAY FEED FAILED — falling back to daily';
+      // fall through to the Frankfurter daily path below for fiat pairs
+    }
+  } else if(pair === 'XAU/USD'){
+    ticker.textContent = 'GOLD NEEDS A TWELVE DATA KEY — paste one above';
+    STATE.series = null; STATE.latest = null;
+    return;
+  }
+
+  // Frankfurter daily fallback — no key needed, fiat pairs only.
+  const [base, quote] = pair.split('/');
+  try{
+    const end = new Date();
+    const start = new Date(end.getTime() - 35*86400000);
+    const latestRes = await fetch(`https://api.frankfurter.app/latest?from=${base}&to=${quote}`);
+    const latestData = await latestRes.json();
+    const seriesRes = await fetch(`https://api.frankfurter.app/${fmtDate(start)}..${fmtDate(end)}?from=${base}&to=${quote}`);
+    const seriesData = await seriesRes.json();
+
+    const closes = Object.keys(seriesData.rates).sort().map(d => ({date:d, value: seriesData.rates[d][quote]}));
+    STATE.series = { closes, stats: computeStats(closes, base, quote) };
+    STATE.latest = {value: latestData.rates[quote], date: latestData.date};
+
+    const pctChange = STATE.series.stats.pctChange;
+    const dirClass = pctChange >= 0 ? 'up' : 'down';
+    const arrow = pctChange >= 0 ? '▲' : '▼';
+    ticker.innerHTML = `${latestData.rates[quote].toFixed(quote==='JPY'?3:5)} <span class="delta ${dirClass}">${arrow} ${pctChange.toFixed(2)}% / 30d</span> <span style="color:var(--ghost);font-size:11px;">DAILY</span>`;
+    document.getElementById('fileNo').textContent = `FILE NO. ${base}${quote} · ${fmtDate(new Date())} · Daily`;
+  }catch(e){
+    ticker.textContent = 'LIVE FEED UNAVAILABLE';
+    STATE.series = null; STATE.latest = null;
+  }
+}
+
+// ---------- auto-context fetches for Macro and Intermarket ----------
+// NOTE: these two were written against documented API shapes for Finnhub and
+// Twelve Data but were never verified against the live endpoints from this
+// environment (no network path to either from the build sandbox). Both fail
+// gracefully to "no auto data" and fall back to manual notes only — they will
+// not break the rest of the app if the free tier doesn't cover these endpoints
+// or the response shape has changed.
+async function fetchEconomicCalendar(){
+  const key = document.getElementById('finnhubKey').value.trim();
+  if(!key){ STATE.calendarSummary = ''; return null; }
+  try{
+    const start = new Date(Date.now() - 3*86400000);
+    const end = new Date(Date.now() + 4*86400000);
+    const url = `https://finnhub.io/api/v1/calendar/economic?from=${fmtDate(start)}&to=${fmtDate(end)}&token=${encodeURIComponent(key)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if(!res.ok){
+      throw new Error(`HTTP ${res.status} — ${data.error || data.message || JSON.stringify(data).slice(0,150)}`);
+    }
+    const events = Array.isArray(data.economicCalendar) ? data.economicCalendar : (Array.isArray(data) ? data : null);
+    if(!events) throw new Error('Unexpected response shape: ' + JSON.stringify(data).slice(0,150));
+
+    const [base, quote] = STATE.pair.split('/');
+    const currencyToCountry = {
+      USD:['US','United States'], EUR:['EU','EZ','Euro Area','Eurozone'], JPY:['JP','Japan'],
+      GBP:['GB','UK','United Kingdom'], AUD:['AU','Australia'], CAD:['CA','Canada'],
+      NZD:['NZ','New Zealand'], CHF:['CH','Switzerland']
+    };
+    const relevantCountries = new Set([...(currencyToCountry[base]||[]), ...(currencyToCountry[quote]||[])]);
+    const relevant = events.filter(e => relevantCountries.has(e.country) && (e.impact === 'high' || e.impact === 3));
+
+    if(relevant.length === 0){
+      STATE.calendarSummary = `Finnhub calendar fetched successfully — no high-impact ${base}/${quote} events found in this window.`;
+    } else {
+      STATE.calendarSummary = relevant.slice(0,8).map(e =>
+        `${e.date || e.time || ''} [${e.country}] ${e.event}: actual ${e.actual ?? 'n/a'}, estimate ${e.estimate ?? 'n/a'}, previous ${e.prev ?? 'n/a'}`
+      ).join('\n');
+    }
+    return `Calendar: ${relevant.length} high-impact event(s) for ${base}/${quote}.`;
+  }catch(e){
+    STATE.calendarSummary = '';
+    console.error('Finnhub calendar fetch failed:', e);
+    return 'Calendar fetch failed: ' + e.message + ' (check browser console for full detail) — Macro falls back to manual notes only.';
+  }
+}
+
+async function fetchIntermarketData(){
+  const key = document.getElementById('goldApiKey').value.trim();
+  if(!key){ STATE.intermarketSummary = ''; return null; }
+  try{
+    const [dxyRes, goldRes] = await Promise.all([
+      fetch(`https://api.twelvedata.com/quote?symbol=DXY&apikey=${encodeURIComponent(key)}`),
+      fetch(`https://api.twelvedata.com/quote?symbol=XAU/USD&apikey=${encodeURIComponent(key)}`)
+    ]);
+    const dxy = await dxyRes.json();
+    const gold = await goldRes.json();
+    if(dxy.code || dxy.status === 'error') throw new Error('DXY: ' + (dxy.message || JSON.stringify(dxy).slice(0,150)));
+    if(gold.code || gold.status === 'error') throw new Error('Gold: ' + (gold.message || JSON.stringify(gold).slice(0,150)));
+
+    const lines = [];
+    if(dxy.close) lines.push(`DXY: ${dxy.close} (${dxy.percent_change >= 0 ? '+' : ''}${dxy.percent_change}% today)`);
+    if(gold.close) lines.push(`Gold (XAU/USD): ${gold.close} (${gold.percent_change >= 0 ? '+' : ''}${gold.percent_change}% today)`);
+    if(lines.length === 0) throw new Error('No usable close price in either response: ' + JSON.stringify({dxy,gold}).slice(0,200));
+
+    STATE.intermarketSummary = lines.join('\n');
+    return `Intermarket: DXY + Gold fetched.`;
+  }catch(e){
+    STATE.intermarketSummary = '';
+    console.error('Twelve Data intermarket fetch failed:', e);
+    return 'Intermarket fetch failed: ' + e.message + ' (check browser console for full detail) — falls back to manual notes only.';
+  }
+}
+
+function getAutoContext(key){
+  if(key === 'macro') return STATE.calendarSummary || '';
+  if(key === 'intermarket') return STATE.intermarketSummary || '';
+  if(key === 'ict'){
+    if(!STATE.series || STATE.series.stats.resolution !== 'intraday_1h') return '';
+    const s = STATE.series.stats;
+    let text = `Computed from real 1H candles (not manually typed): swing high ${s.swingHigh}, swing low ${s.swingLow} over the last ~24 hourly candles.`;
+    text += s.fvg
+      ? ` Most recent unfilled 3-candle fair value gap detected: ${s.fvg.type}, between ${s.fvg.bottom} and ${s.fvg.top}, formed around ${s.fvg.at}.`
+      : ` No clear 3-candle fair value gap detected in the recent window.`;
+    return text;
+  }
+  return '';
+}
+
+// ---------- TradingView chart widget (visual reference only) ----------
+function pairToTVSymbol(pair){
+  if(pair === 'XAU/USD') return 'OANDA:XAUUSD';
+  return 'FX:' + pair.replace('/','');
+}
+function renderTVChart(pair){
+  const container = document.getElementById('tv_chart_widget');
+  if(!container) return;
+  if(typeof TradingView === 'undefined' || !TradingView.widget){
+    setTimeout(()=>renderTVChart(pair), 300); // tv.js may still be loading
+    return;
+  }
+  container.innerHTML = '';
+  try{
+    new TradingView.widget({
+      autosize: true,
+      symbol: pairToTVSymbol(pair),
+      interval: '60',
+      timezone: 'Etc/UTC',
+      theme: 'dark',
+      style: '1',
+      locale: 'en',
+      toolbar_bg: '#13161b',
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      save_image: false,
+      container_id: 'tv_chart_widget'
+    });
+  }catch(e){
+    container.innerHTML = '<div class="placeholder-note" style="padding:16px;">Chart widget failed to load.</div>';
+  }
+}
+
+// ---------- skill execution ----------
+function getManualText(key){
+  const el = document.getElementById('manual_'+key);
+  return el ? el.value.trim() : '';
+}
+
+async function runSkill(key){
+  const meta = SKILLS[key];
+  STATE.skills[key] = {...(STATE.skills[key]||{}), loading:true};
+  renderArticles();
+
+  let userPrompt = null;
+
+  if(meta.mode === 'manual'){
+    const text = getManualText(key);
+    const auto = getAutoContext(key);
+    if(!text && !auto){
+      STATE.skills[key] = {status:'insufficient_data', reason:'No data provided for this specialty — type notes, or fetch live data with a calendar/intermarket key entered.', loading:false};
+      renderArticles(); return;
+    }
+    userPrompt = `Trader-provided notes:\n${text || '(none provided)'}\n\nAuto-fetched market context:\n${auto || '(none available — no key provided or fetch failed)'}`;
+  }
+  else if(meta.mode === 'auto'){
+    if(!STATE.series){
+      STATE.skills[key] = {status:'insufficient_data', reason:'No live price series fetched yet.', loading:false};
+      renderArticles(); return;
+    }
+    const resLabel = STATE.series.stats.resolution === 'intraday_1h' ? 'Intraday (1-hour candle)' : 'Daily';
+    userPrompt = `${resLabel} price series statistics for ${STATE.series.stats.base}/${STATE.series.stats.quote} over the last ${STATE.series.stats.n} periods:\n${JSON.stringify(STATE.series.stats)}`;
+  }
+  else if(meta.mode === 'history'){
+    if(STATE.trades.length < 3){
+      STATE.skills[key] = {status:'insufficient_data', reason:'Fewer than 3 logged trades — not enough history for a genuine edge read.', loading:false};
+      renderArticles(); return;
+    }
+    // No LLM call here on purpose. This is the one specialist where we have real
+    // ground truth (your own logged trades), so confidence is a measured statistic,
+    // not a model-assigned number. Optionally scoped to an exact setup tag if given.
+    const tagInput = document.getElementById('setuptag_'+key);
+    const tag = tagInput ? tagInput.value.trim() : '';
+    const relevant = tag
+      ? STATE.trades.filter(t => t.pair === STATE.pair && (t.setup||'').toLowerCase() === tag.toLowerCase())
+      : STATE.trades.filter(t => t.pair === STATE.pair);
+    const scope = tag ? `"${tag}" on ${STATE.pair}` : `all logged setups on ${STATE.pair}`;
+
+    if(relevant.length === 0){
+      STATE.skills[key] = {status:'insufficient_data', reason:`No logged trades match ${scope} yet.`, loading:false};
+      renderArticles(); return;
+    }
+
+    const wins = relevant.filter(t=>t.outcome==='Win').length;
+    const losses = relevant.filter(t=>t.outcome==='Loss').length;
+    const n = relevant.length;
+    const winRate = Math.round((wins/n)*100);
+    const sampleWeight = Math.min(1, n/5); // 5+ trades = full weight; fewer shrinks toward 50 (uncertain)
+    const confidence = Math.round(50 + (winRate-50)*sampleWeight);
+    const avgR = (relevant.reduce((a,t)=>a+t.r,0)/n).toFixed(2);
+
+    STATE.skills[key] = {
+      status: 'ok',
+      measured: true,
+      claim: `${wins}W-${losses}L (${winRate}% win rate) over ${n} logged trade${n===1?'':'s'} matching ${scope}. Average R: ${avgR}.`,
+      supporting_evidence: n >= 5
+        ? [`Sample size of ${n} is large enough to trust close to its raw win rate.`]
+        : [`Only ${n} trade${n===1?'':'s'} logged — confidence below is shrunk toward 50% to reflect that small-sample uncertainty.`],
+      contradicting_evidence: losses > 0 ? [`${losses} of ${n} matching trades were losses.`] : [],
+      confidence,
+      reason: `Computed directly from your trade ledger — not model-estimated. Raw win rate ${winRate}%, shrunk by sample size (n=${n}).`,
+      loading: false
+    };
+    renderArticles();
+    return;
+  }
+
+  const result = await callClaude(CONSTITUTION_PREFIX + '\n\nYour role: ' + meta.role, userPrompt);
+  STATE.skills[key] = {...result, loading:false};
+  renderArticles();
+}
+
+async function runConviction(){
+  const okSkills = Object.entries(STATE.skills).filter(([k,v]) => v && v.status === 'ok' && k !== 'psychology');
+  const summary = okSkills.map(([k,v]) => ({framework: SKILLS[k].title, claim:v.claim, confidence:v.confidence}));
+  let warningContext = 'No personal edge data available.';
+  const pe = STATE.skills['personaledge'];
+  if(pe && pe.status === 'ok') warningContext = 'Personal Edge Engine finding: ' + pe.claim + ' (confidence ' + pe.confidence + ')';
+
+  const stampEl = document.getElementById('stamp');
+  stampEl.className = 'stamp'; stampEl.textContent = 'DELIBERATING…';
+
+  if(okSkills.length === 0){
+    stampEl.className = 'stamp low';
+    stampEl.innerHTML = 'NO EVIDENCE<br>SUBMITTED';
+    document.getElementById('scoreList').innerHTML='';
+    document.getElementById('overrideWarning').innerHTML='';
+    const lw = document.getElementById('lastWord');
+    lw.className = 'stamp low'; lw.innerHTML = 'CONDITIONS NOT MET';
+    document.getElementById('lastWordReason').textContent = 'No specialist returned a confirmed finding yet — nothing to evaluate.';
+    document.getElementById('tradePlan').innerHTML = '<span style="color:var(--ghost);">No plan compiled — no evidence submitted yet.</span>';
+    return;
+  }
+
+  const sysPrompt = `You are the Conviction Engine. You do not analyze markets yourself — you aggregate the independent specialist findings given to you.
+Constitution rules: minimum 3 specialists with status "ok" are required to declare any meaningful alignment; with fewer than 3, alignment must be "insufficient". Never use certainty language ("will happen", "buy", "sell") — use evidence-favors phrasing only. If the trader-history context indicates this pair/setup has historically performed poorly for this trader, include an override_warning.
+Required JSON schema: {"overall_conviction":number,"alignment":"high"|"moderate"|"low"|"insufficient","major_disagreement":string,"verdict_text":string,"framework_scores":{"<name>":number},"override_warning":string|null}`;
+  const userPrompt = `Specialist findings:\n${JSON.stringify(summary)}\n\nTrader history context: ${warningContext}`;
+
+  const result = await callClaude(sysPrompt, userPrompt, 600);
+
+  if(result.status === 'error'){
+    stampEl.className='stamp low'; stampEl.textContent='AGGREGATION ERROR';
+    const lw = document.getElementById('lastWord');
+    lw.className = 'stamp low'; lw.innerHTML = 'CONDITIONS NOT MET';
+    document.getElementById('lastWordReason').textContent = 'The Conviction Engine call failed — treat this as no evidence, not as a negative read.';
+    document.getElementById('tradePlan').innerHTML = '<span style="color:var(--ghost);">No plan compiled — aggregation call failed.</span>';
+    return;
+  }
+
+  // GUARDRAIL 4 — enforced in code, not just prompted. The model's own "alignment"
+  // field is never trusted for this gate: if fewer than 3 specialists returned
+  // confirmed evidence, no signal-style framing is shown, no matter what the model says.
+  const enoughFrameworks = okSkills.length >= 3;
+  const align = enoughFrameworks ? (result.alignment || 'moderate') : 'insufficient';
+  stampEl.className = 'stamp ' + (align==='high'?'high':align==='moderate'?'moderate':'low');
+  if(enoughFrameworks){
+    stampEl.innerHTML = `${(result.overall_conviction||0)}% CONVICTION<br>${align.toUpperCase()} ALIGNMENT`;
+  } else {
+    stampEl.innerHTML = `NO SIGNAL<br>${okSkills.length}/3 FRAMEWORKS CONFIRMED`;
+  }
+
+  const scoreList = document.getElementById('scoreList');
+  const gateNote = enoughFrameworks ? '' : `<div style="border:none;color:var(--ghost);font-style:italic;padding-bottom:6px;">Guardrail 4 enforced: minimum 3 confirmed frameworks required before any alignment is declared.</div>`;
+  scoreList.innerHTML = gateNote + `<div><span>Verdict</span><span></span></div><div style="border:none;color:var(--paper);padding-bottom:8px;">${result.verdict_text||''}</div>` +
+    Object.entries(result.framework_scores||{}).map(([k,v])=>`<div><span>${k}</span><span>${v}</span></div>`).join('');
+
+  // GUARDRAIL 5 — also enforced in code where we actually have ground truth.
+  // The Personal Edge specialist is deterministic (real win-rate math, see
+  // runSkill's history-mode branch), so if it measured a losing record on this
+  // exact setup, that override is computed here directly and takes priority
+  // over whatever the Conviction Engine's own override_warning says — a
+  // measured statistic should never be talked out of by a narrative summary.
+  const peSkill = STATE.skills['personaledge'];
+  let measuredOverride = null;
+  if(peSkill && peSkill.measured && peSkill.status === 'ok' && peSkill.confidence < 50){
+    measuredOverride = `Measured track record (not model-estimated): ${peSkill.claim}`;
+  }
+  const effectiveOverride = measuredOverride || result.override_warning;
+
+  const warnEl = document.getElementById('overrideWarning');
+  warnEl.innerHTML = effectiveOverride ? `<div class="warning-banner">⚠ TRADER OVERRIDE${measuredOverride ? ' (measured)' : ''}: ${effectiveOverride}</div>` : '';
+
+  // THE LAST WORD — a deterministic gate, computed in code, not asked of the model.
+  // It never says "buy" or "sell." It only states whether conditions support
+  // considering a trade at all. Order matters: each check below can only
+  // downgrade the verdict, never upgrade it.
+  //
+  // Two trader-blend principles are encoded here, deliberately NOT as vote
+  // weights (see SPECIALIST_WEIGHTS comment):
+  //  - Hougaard ("patience, avoid over-analysis, high-conviction execution")
+  //    raises the bar for CONDITIONS MET: needs both higher overall conviction
+  //    AND a clear weighted-majority direction, not just "more than the others."
+  //  - Douglas ("process over outcome, no emotional attachment") gives the
+  //    Psychology check-in real gating power: a FOMO/Revenge/Tilt flag caps the
+  //    result at BORDERLINE even when the math alone would say MET. This is a
+  //    self-reported signal, so it can only ever cap downward, never block
+  //    entirely on its own — that would let one click overrule real evidence.
+  const lastWordEl = document.getElementById('lastWord');
+  const lastWordReasonEl = document.getElementById('lastWordReason');
+  const conviction = result.overall_conviction || 0;
+  const weighted = computeWeightedBias(okSkills);
+  let lwClass, lwText, lwReason;
+
+  if(!enoughFrameworks){
+    lwClass = 'low'; lwText = 'CONDITIONS NOT MET';
+    lwReason = `Only ${okSkills.length} of the minimum 3 frameworks required even confirmed a finding. There isn't enough independent evidence to evaluate this setup at all.`;
+  } else if(effectiveOverride){
+    lwClass = 'low'; lwText = 'CONDITIONS NOT MET';
+    lwReason = `Evidence may look favorable, but your own trade history overrides it: ${effectiveOverride}`;
+  } else if(align === 'high' && conviction >= WEIGHTED_MET_CONVICTION && weighted.dominantShare >= WEIGHTED_MET_AGREEMENT){
+    lwClass = 'high'; lwText = 'CONDITIONS MET';
+    lwReason = `${okSkills.length} frameworks confirmed, ${conviction}% conviction, and ${Math.round(weighted.dominantShare*100)}% weighted agreement on ${weighted.dominant}. Meets the stricter Hougaard-style bar — worth building a trade plan around. Sizing and entry are still entirely yours.`;
+  } else if(conviction >= 50){
+    lwClass = 'moderate'; lwText = 'BORDERLINE';
+    lwReason = `${conviction}% conviction, ${Math.round(weighted.dominantShare*100)}% weighted agreement on ${weighted.dominant} — leans somewhere, but doesn't clear the stricter bar for full conviction. Reduced size or wait for more confirmation.`;
+  } else {
+    lwClass = 'low'; lwText = 'CONDITIONS NOT MET';
+    lwReason = `${conviction}% conviction is too weak or too conflicted across frameworks to support considering a trade right now.`;
+  }
+
+  // Douglas cap — applied last, can only downgrade.
+  const psyCapStates = new Set(['fomo','revenge','tilt']);
+  if(lwText === 'CONDITIONS MET' && psyCapStates.has(STATE.psyState)){
+    lwClass = 'moderate'; lwText = 'BORDERLINE';
+    lwReason = `Evidence cleared the bar (${conviction}% conviction, ${Math.round(weighted.dominantShare*100)}% weighted agreement), but your self-reported state (${STATE.psyState}) caps this at borderline. Process over outcome — this is the moment that matters most.`;
+  }
+
+  lastWordEl.className = 'stamp ' + lwClass;
+  lastWordEl.innerHTML = lwText;
+  lastWordReasonEl.textContent = lwReason;
+
+  // Market memory snapshot — one entry per calendar day per pair, short label not the full claim
+  const snapKey = 'memsnap_' + STATE.pair.replace('/','');
+  const prev = await storeGet(snapKey);
+  const memEl = document.getElementById('memoryNote');
+  const regimeSkill = STATE.skills['regime'];
+  const rawRegime = (regimeSkill && regimeSkill.status==='ok') ? regimeSkill.claim : null;
+  const currentRegime = rawRegime ? (rawRegime.length > 90 ? rawRegime.slice(0,90) + '…' : rawRegime) : 'unrecorded';
+  const today = fmtDate(new Date());
+
+  if(!prev){
+    memEl.textContent = 'First recorded session for this pair.';
+    await storeSet(snapKey, {date: today, regime: currentRegime, conviction: result.overall_conviction});
+  } else if(prev.date === today){
+    memEl.innerHTML = `Already recorded today: <em>${prev.regime}</em>. Re-running doesn't overwrite the same day's snapshot.`;
+  } else {
+    memEl.innerHTML = `Last session (${prev.date}): <em>${prev.regime}</em><br>This session: <em>${currentRegime}</em>`;
+    await storeSet(snapKey, {date: today, regime: currentRegime, conviction: result.overall_conviction});
+  }
+
+  renderTradePlan(okSkills, lwText, conviction, align);
+  updateChecklist();
+}
+
+// THE TRADE PLAN — compiles scattered specialist outputs into one place.
+// Entirely code-computed from structured fields already on each specialist's
+// response (bias, key_level) — no extra API call, no new model interpretation.
+// This is a summary of evidence, never an instruction: it states a bias and
+// reference levels, not a "buy" or "sell" command, and it refuses to compile
+// anything at all when the Last Word says conditions aren't met.
+function renderTradePlan(okSkills, lwText, conviction, align){
+  const planEl = document.getElementById('tradePlan');
+
+  if(lwText === 'CONDITIONS NOT MET'){
+    planEl.innerHTML = `<span style="color:var(--ghost);">No plan compiled — The Last Word says conditions aren't met. Forcing a plan here would contradict Guardrail 4/5.</span>`;
+    return;
+  }
+
+  const weighted = computeWeightedBias(okSkills);
+  const levels = [];
+  const triggers = [];
+  okSkills.forEach(([k,v])=>{
+    if(SPECIALIST_WEIGHTS[k] === undefined) return;
+    if(typeof v.key_level === 'number' && v.key_level){
+      levels.push({source: SKILLS[k].title, level: v.key_level, label: v.level_label || ''});
+    }
+    if(v.trigger_condition){
+      triggers.push({source: SKILLS[k].title, text: v.trigger_condition});
+    }
+  });
+
+  if(weighted.totalW === 0){
+    planEl.innerHTML = `<span style="color:var(--ghost);">No market-reading specialists reported a bias yet.</span>`;
+    return;
+  }
+
+  let biasLabel, biasColor;
+  if(weighted.bullishW > weighted.bearishW && weighted.bullishW > weighted.neutralW){ biasLabel = 'LONG BIAS'; biasColor = 'var(--sage)'; }
+  else if(weighted.bearishW > weighted.bullishW && weighted.bearishW > weighted.neutralW){ biasLabel = 'SHORT BIAS'; biasColor = 'var(--brick)'; }
+  else { biasLabel = 'SPLIT — NO CLEAR DIRECTION'; biasColor = 'var(--ghost)'; }
+
+  const pct = (w) => weighted.totalW > 0 ? Math.round((w/weighted.totalW)*100) : 0;
+
+  let html = `<div style="font-family:var(--mono);font-weight:700;color:${biasColor};letter-spacing:.06em;font-size:13px;margin-bottom:6px;">${biasLabel}</div>`;
+  html += `<div class="reason" style="margin-bottom:8px;">${pct(weighted.bullishW)}% weighted bullish · ${pct(weighted.bearishW)}% weighted bearish · ${pct(weighted.neutralW)}% neutral. ${lwText} (${conviction}% conviction, ${align} alignment, ${Math.round(weighted.dominantShare*100)}% weighted agreement).</div>`;
+
+  html += `<div class="evidence"><div class="lbl">Weighted contributors</div><ul>` +
+    weighted.contributors.sort((a,b)=>b.w-a.w).map(c =>
+      `<li style="color:${c.bias==='bullish'?'var(--sage)':c.bias==='bearish'?'var(--brick)':'var(--ghost)'};">${c.title} (${c.w}%) — ${c.bias}</li>`
+    ).join('') + `</ul></div>`;
+
+  if(levels.length){
+    html += `<div class="evidence"><div class="lbl">Reference levels from the evidence</div><ul>` +
+      levels.map(l => `<li>${l.level} — ${l.label || 'no label'} (${l.source})</li>`).join('') + `</ul></div>`;
+  } else {
+    html += `<div class="placeholder-note">No specialist reported a specific price level this run — add intraday notes to ICT for a level.</div>`;
+  }
+
+  if(triggers.length){
+    html += `<div class="evidence"><div class="lbl">Confirmation to wait for, per specialist</div><ul>` +
+      triggers.map(t => `<li>${t.text} (${t.source})</li>`).join('') + `</ul></div>`;
+  }
+
+  html += `<div class="placeholder-note" style="margin-top:8px;">Weights reflect a trader-blend philosophy (ICT/SMC 40%, Price Action 20%, Regime 5%, confirmation layer 35%) — see The Last Word for how Hougaard-style strictness and Douglas-style psychology gating apply on top of this. This is a compiled summary of evidence, not an instruction.</div>`;
+
+  planEl.innerHTML = html;
+}
+
+// PRE-TRADE CHECKLIST — encodes the same 10-step process experienced discretionary
+// traders describe (calendar check, HTF bias, key levels, correlated markets,
+// defined trigger, defined risk, psych check, own track record, decision gate,
+// log it after). Every item is computed from actual session state, not
+// self-reported, and nothing here is invented by a model — it's a checklist,
+// not a specialist.
+function updateChecklist(){
+  const el = document.getElementById('checklist');
+  const macro = STATE.skills['macro'];
+  const intermarket = STATE.skills['intermarket'];
+  const regime = STATE.skills['regime'];
+  const ict = STATE.skills['ict'];
+  const supplydemand = STATE.skills['supplydemand'];
+  const personaledge = STATE.skills['personaledge'];
+  const anyTrigger = Object.values(STATE.skills).some(s => s && s.trigger_condition);
+  const anyLevel = (ict && ict.key_level) || (supplydemand && supplydemand.key_level);
+  const lastWordReady = document.getElementById('lastWord').textContent.trim() !== 'RUN ANALYSIS FIRST';
+
+  const items = [
+    { label: 'Calendar / news checked', done: !!(macro && macro.status === 'ok') },
+    { label: 'Higher-timeframe bias established', done: !!(regime && regime.status === 'ok') },
+    { label: 'Key levels marked', done: !!anyLevel },
+    { label: 'Correlated markets checked', done: !!(intermarket && intermarket.status === 'ok') },
+    { label: 'Specific trigger defined', done: anyTrigger },
+    { label: 'Risk defined before entry', done: !!STATE.riskCalculated },
+    { label: 'Psychological state checked', done: !!STATE.psyState },
+    { label: 'Own track record checked', done: !!(personaledge && personaledge.status === 'ok') },
+    { label: 'Decision gate reached (Last Word)', done: lastWordReady },
+  ];
+  const doneCount = items.filter(i=>i.done).length;
+
+  el.innerHTML = `<div class="reason" style="margin-bottom:6px;">${doneCount} of ${items.length} steps covered this session.</div>` +
+    `<ul style="margin:0;padding-left:16px;">` +
+    items.map(i => `<li style="color:${i.done?'var(--sage)':'var(--ghost)'};">${i.done?'✓':'○'} ${i.label}</li>`).join('') +
+    `</ul><div class="placeholder-note" style="margin-top:8px;">10th step — log the trade after, regardless of outcome — isn't checkable in advance. Do it anyway.</div>`;
+}
+
+// ---------- rendering ----------
+function statusClass(s){
+  if(!s) return 'status-insufficient';
+  if(s.loading) return 'status-insufficient';
+  if(s.measured) return 'status-measured';
+  if(s.status === 'ok') return s.confidence >= 60 ? 'status-ok' : 'status-low';
+  if(s.status === 'error') return 'status-error';
+  return 'status-insufficient';
+}
+
+function renderCard(key){
+  const meta = SKILLS[key];
+  const s = STATE.skills[key];
+  const cls = statusClass(s);
+  let body = '';
+
+  if(meta.mode === 'manual'){
+    body += `<div class="manual-input"><textarea id="manual_${key}" placeholder="${meta.placeholder}">${(document.getElementById('manual_'+key)||{}).value || ''}</textarea>
+      <button class="run-one" onclick="runSkill('${key}')">Analyze</button></div>`;
+  }
+  if(meta.mode === 'history'){
+    body += `<div class="manual-input"><input type="text" id="setuptag_${key}" placeholder="Exact setup tag to check, e.g. FVG retest — leave blank for all setups on this pair" style="width:100%;" value="${(document.getElementById('setuptag_'+key)||{}).value || ''}">
+      <button class="run-one" onclick="runSkill('${key}')">Check Track Record</button></div>`;
+  }
+
+  if(!s){
+    body += `<div class="placeholder-note">Not yet run.</div>`;
+  } else if(s.loading){
+    body += `<div class="placeholder-note">Analyzing…</div>`;
+  } else if(s.status === 'insufficient_data'){
+    body += `<div class="placeholder-note">INSUFFICIENT DATA — ${s.reason||''}</div>`;
+  } else if(s.status === 'error'){
+    body += `<div class="placeholder-note">${s.reason||'Error'}</div>`;
+  } else if(s.status === 'ok'){
+    body += `<div class="claim">"${s.claim}"</div>`;
+    if(s.supporting_evidence && s.supporting_evidence.length){
+      body += `<div class="evidence"><div class="lbl">Supporting</div><ul>${s.supporting_evidence.map(e=>`<li>${e}</li>`).join('')}</ul></div>`;
+    }
+    if(s.contradicting_evidence && s.contradicting_evidence.length){
+      body += `<div class="evidence"><div class="lbl">Contradicting</div><ul class="contra">${s.contradicting_evidence.map(e=>`<li>${e}</li>`).join('')}</ul></div>`;
+    }
+    body += `<div class="confbar-wrap"><div class="confbar"><div style="width:${s.confidence}%;"></div></div><span class="confnum">${s.confidence}%</span></div>`;
+    if(s.reason) body += `<div class="reason">${s.reason}</div>`;
+  }
+
+  const badgeClass = s && s.measured ? 'measured' : (s && s.status==='ok') ? 'ok' : (s && s.status==='error') ? 'error' : 'insufficient';
+  const badgeText = !s ? 'PENDING' : s.loading ? 'RUNNING' : s.measured ? 'MEASURED' : s.status==='ok' ? 'CONFIRMED' : s.status==='error' ? 'ERROR' : 'INSUFFICIENT';
+
+  return `<div class="card ${cls}">
+    <div class="card-top"><h3>${meta.title}</h3><span class="badge ${badgeClass}">${badgeText}</span></div>
+    ${body}
+  </div>`;
+}
+
+function renderArticles(){
+  const main = document.getElementById('articles');
+  main.innerHTML = ARTICLES.map(art => `
+    <div class="article-head">
+      <span class="label">${art.label}</span>
+      <h2>${art.title}</h2>
+      <hr class="rule">
+    </div>
+    <div class="skillgrid">
+      ${art.skills.map(k => renderCard(k)).join('')}
+    </div>
+  `).join('');
+}
+
+// ---------- trade ledger ----------
+function renderLedger(){
+  const tbl = document.getElementById('ledgerTable');
+  if(STATE.trades.length === 0){ tbl.innerHTML = '<tr><td style="color:var(--ghost);">No trades logged yet.</td></tr>'; return; }
+  tbl.innerHTML = `<tr><th>Pair</th><th>Dir</th><th>Sess</th><th>R</th><th>$</th><th>Out</th><th></th></tr>` +
+    STATE.trades.slice().reverse().map((t,idx)=>{
+      const realIdx = STATE.trades.length - 1 - idx;
+      const pnlText = typeof t.pnl === 'number' ? `${t.pnl>=0?'+':''}${t.pnl.toFixed(0)}` : '—';
+      return `<tr><td>${t.pair}</td><td>${t.dir}</td><td>${t.session}</td><td>${t.r}</td><td>${pnlText}</td>
+        <td class="${t.outcome==='Win'?'win':t.outcome==='Loss'?'loss':''}">${t.outcome}</td>
+        <td><span class="small-x" onclick="deleteTrade(${realIdx})">✕</span></td></tr>`;
+    }).join('');
+}
+async function deleteTrade(idx){
+  STATE.trades.splice(idx,1);
+  await storeSet('trades', STATE.trades);
+  renderLedger();
+}
+document.getElementById('addTradeBtn').addEventListener('click', async ()=>{
+  const trade = {
+    pair: STATE.pair,
+    dir: document.getElementById('tDir').value,
+    outcome: document.getElementById('tOutcome').value,
+    session: document.getElementById('tSession').value,
+    r: parseFloat(document.getElementById('tR').value)||0,
+    pnl: document.getElementById('tPnl').value === '' ? null : parseFloat(document.getElementById('tPnl').value),
+    setup: document.getElementById('tSetup').value.trim(),
+    date: fmtDate(new Date())
+  };
+  STATE.trades.push(trade);
+  await storeSet('trades', STATE.trades);
+  renderLedger();
+});
+
+// ---------- risk manager ----------
+document.getElementById('riskCalcBtn').addEventListener('click', ()=>{
+  const account = parseFloat(document.getElementById('riskAccount').value)||0;
+  const pct = parseFloat(document.getElementById('riskPct').value)||0;
+  const pips = parseFloat(document.getElementById('riskPips').value)||1;
+  const riskAmount = account * (pct/100);
+  const pipValuePerLot = 10; // approx for standard lot, USD-quoted
+  const lots = riskAmount / (pips * pipValuePerLot);
+  document.getElementById('riskResult').innerHTML =
+    `Risk amount: $${riskAmount.toFixed(2)}<br>Suggested size: ${lots.toFixed(2)} standard lots`;
+  STATE.riskCalculated = true;
+  if(document.getElementById('checklist')) updateChecklist();
+});
+
+// ---------- daily risk budget (drawdown tracker) ----------
+function checkDrawdownBudget(){
+  const account = parseFloat(document.getElementById('ddAccount').value)||0;
+  const dailyPct = parseFloat(document.getElementById('ddDailyLimit').value)||0;
+  const maxPct = parseFloat(document.getElementById('ddMaxLimit').value)||0;
+  const today = fmtDate(new Date());
+
+  const tradesWithPnl = STATE.trades.filter(t => typeof t.pnl === 'number');
+  const todayPnl = tradesWithPnl.filter(t => t.date === today).reduce((a,t)=>a+t.pnl, 0);
+  const cumulativePnl = tradesWithPnl.reduce((a,t)=>a+t.pnl, 0);
+
+  const dailyLimitDollar = account * (dailyPct/100);
+  const maxLimitDollar = account * (maxPct/100);
+  const dailyRemaining = dailyLimitDollar + Math.min(todayPnl, 0); // only losses eat the budget
+  const maxRemaining = maxLimitDollar + Math.min(cumulativePnl, 0);
+
+  const el = document.getElementById('ddResult');
+  let lines = [];
+  lines.push(`Today's P&L: ${todayPnl>=0?'+':''}$${todayPnl.toFixed(2)} — daily budget remaining: $${Math.max(0,dailyRemaining).toFixed(2)} of $${dailyLimitDollar.toFixed(2)}`);
+  lines.push(`Cumulative P&L: ${cumulativePnl>=0?'+':''}$${cumulativePnl.toFixed(2)} — drawdown budget remaining: $${Math.max(0,maxRemaining).toFixed(2)} of $${maxLimitDollar.toFixed(2)}`);
+
+  if(dailyRemaining <= 0 || maxRemaining <= 0){
+    el.innerHTML = `<span style="color:var(--brick);">⚠ LIMIT BREACHED</span><br>` + lines.join('<br>');
+  } else if(dailyRemaining < dailyLimitDollar*0.25 || maxRemaining < maxLimitDollar*0.25){
+    el.innerHTML = `<span style="color:var(--amber);">⚠ CLOSE TO LIMIT — under 25% budget remaining</span><br>` + lines.join('<br>');
+  } else {
+    el.innerHTML = `<span style="color:var(--sage);">Within budget</span><br>` + lines.join('<br>');
+  }
+  return {dailyRemaining, maxRemaining, dailyLimitDollar, maxLimitDollar};
+}
+document.getElementById('ddCheckBtn').addEventListener('click', checkDrawdownBudget);
+
+
+// ---------- psychology ----------
+document.getElementById('psyButtons').addEventListener('click', (e)=>{
+  if(e.target.tagName !== 'BUTTON') return;
+  [...document.querySelectorAll('#psyButtons button')].forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  STATE.psyState = e.target.dataset.state;
+  runPsychology();
+  if(document.getElementById('checklist')) updateChecklist();
+});
+
+async function runPsychology(){
+  if(!STATE.psyState){
+    STATE.skills['psychology'] = {status:'insufficient_data', reason:'No self-reported state selected.'};
+    document.getElementById('psyResult').textContent = 'Select a state to check in.';
+    return;
+  }
+  const note = document.getElementById('psyNote').value.trim();
+  const sysPrompt = CONSTITUTION_PREFIX + "\n\nYour role: You are the Psychology Analyst. You assess the trader's self-reported emotional state and flag FOMO, revenge trading, tilt or fear. Use the \"reason\" field to advise whether the trader should pause before acting.";
+  const userPrompt = `Self-reported state: ${STATE.psyState}\nNote: ${note || '(none)'}`;
+  STATE.skills['psychology'] = {loading:true};
+  document.getElementById('psyResult').textContent = 'Analyzing…';
+  const result = await callClaude(sysPrompt, userPrompt, 400);
+  STATE.skills['psychology'] = {...result, loading:false};
+  const resEl = document.getElementById('psyResult');
+  if(result.status === 'ok'){
+    resEl.innerHTML = `"${result.claim}"<br><span style="color:var(--text-dim);font-size:11px;">${result.reason||''}</span>`;
+  } else {
+    resEl.textContent = result.reason || 'No reading available.';
+  }
+}
+
+// ---------- main actions ----------
+async function autoRunAutoSkills(){
+  if(!STATE.series) return;
+  const autoKeys = Object.keys(SKILLS).filter(k => SKILLS[k].mode === 'auto');
+  for(const k of autoKeys){
+    await runSkill(k);
+  }
+  await runConviction();
+}
+
+function resetConvictionUI(){
+  document.getElementById('stamp').className='stamp';
+  document.getElementById('stamp').innerHTML='NO ANALYSIS<br>RUN YET';
+  document.getElementById('scoreList').innerHTML='';
+  document.getElementById('overrideWarning').innerHTML='';
+  document.getElementById('lastWord').className='stamp';
+  document.getElementById('lastWord').innerHTML='RUN ANALYSIS<br>FIRST';
+  document.getElementById('lastWordReason').textContent = 'Combines framework count, alignment, conviction score, and your trade history into one plain readout — computed in code, not asked of the model. This still never tells you to buy or sell; it tells you whether conditions support considering a trade at all.';
+  document.getElementById('tradePlan').innerHTML = 'Run analysis to compile a plan — only appears when conditions are at least borderline. This is a summary of what the evidence says, not an instruction. You decide whether to act, and at what size.';
+  document.getElementById('checklist').innerHTML = 'What an experienced trader checks before any entry — computed from your actual session, not self-reported.';
+  STATE.riskCalculated = false;
+}
+
+document.getElementById('pairSelect').addEventListener('change', (e)=>{
+  STATE.pair = e.target.value;
+  STATE.series = null; STATE.latest = null;
+  STATE.skills = {};
+  STATE.calendarSummary = ''; STATE.intermarketSummary = '';
+  document.getElementById('ticker').textContent = '— · —';
+  document.getElementById('marketDataStatus').textContent = '';
+  renderTVChart(STATE.pair);
+  resetConvictionUI();
+  renderArticles();
+});
+
+document.getElementById('fetchBtn').addEventListener('click', async ()=>{
+  await fetchLiveData(STATE.pair);
+  const statusEl = document.getElementById('marketDataStatus');
+  const [calStatus, imStatus] = await Promise.all([fetchEconomicCalendar(), fetchIntermarketData()]);
+  statusEl.textContent = [calStatus, imStatus].filter(Boolean).join(' · ');
+  await autoRunAutoSkills();
+});
+
+document.getElementById('runAllBtn').addEventListener('click', async ()=>{
+  if(!STATE.series) await fetchLiveData(STATE.pair);
+  const allKeys = Object.keys(SKILLS);
+  for(const k of allKeys){
+    // Auto-mode skills only depend on the price series, which hasn't changed
+    // since the fetch already ran them — skip to avoid a duplicate billed call.
+    const already = STATE.skills[k] && STATE.skills[k].status && !STATE.skills[k].loading;
+    if(SKILLS[k].mode === 'auto' && already) continue;
+    await runSkill(k);
+  }
+  if(STATE.psyState && !STATE.skills['psychology']) await runPsychology();
+  renderArticles();
+  await runConviction();
+});
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  STATE.skills = {};
+  STATE.psyState = null;
+  document.querySelectorAll('#psyButtons button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('psyNote').value='';
+  resetConvictionUI();
+  renderArticles();
+});
+
+
+// ---------- init ----------
+(async function init(){
+  STATE.trades = (await storeGet('trades')) || [];
+  renderLedger();
+  renderArticles();
+  renderTVChart(STATE.pair);
+  await fetchLiveData(STATE.pair);
+  const [calStatus, imStatus] = await Promise.all([fetchEconomicCalendar(), fetchIntermarketData()]);
+  const statusEl = document.getElementById('marketDataStatus');
+  if(statusEl) statusEl.textContent = [calStatus, imStatus].filter(Boolean).join(' · ');
+  await autoRunAutoSkills();
+})();
+</script>
+</body>
+</html>
