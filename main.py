@@ -7,29 +7,22 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
-from fx_brain.brain import analyze
-from fx_brain.data import build_snapshot
 from fx_brain.keyed_brain import analyze_with_key
 from fx_brain.keyed_data import build_snapshot_with_key
 
-app = FastAPI(title="FX BRAIN V1", version="0.2.0")
-
-
-class AnalyzeRequest(BaseModel):
-    pair: str = "EUR/USD"
-    timeframe: str = "1h"
+app = FastAPI(title="FX BRAIN", version="0.3.0")
 
 
 class KeyedAnalyzeRequest(BaseModel):
     pair: str = "EUR/USD"
     timeframe: str = "1h"
-    openai_api_key: str = Field(min_length=20)
     twelve_data_api_key: str = Field(min_length=8)
+    finnhub_api_key: str | None = None
 
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "engine": "FX BRAIN V1", "version": "0.2.0"}
+    return {"status": "ok", "engine": "FX BRAIN", "version": "0.3.0"}
 
 
 @app.get("/fx-brain")
@@ -37,21 +30,13 @@ def fx_brain_console():
     return FileResponse(Path(__file__).with_name("fx-brain-console.html"))
 
 
-@app.post("/analyze")
-async def analyze_pair(request: AnalyzeRequest) -> dict:
-    try:
-        snapshot = build_snapshot(request.pair, request.timeframe)
-        decision = await analyze(snapshot)
-        return {"snapshot": snapshot.model_dump(), "decision": decision.model_dump(mode="json")}
-    except Exception as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
-
-
 @app.post("/analyze-with-keys")
 async def analyze_with_keys(request: KeyedAnalyzeRequest) -> dict:
     try:
         snapshot = build_snapshot_with_key(request.pair, request.timeframe, request.twelve_data_api_key)
-        decision = await analyze_with_key(snapshot, request.openai_api_key)
+        # Finnhub is accepted now so the UI contract is stable; its event/news adapter
+        # will be connected to the macro/catalyst layer in the next data iteration.
+        decision = await analyze_with_key(snapshot)
         return {"snapshot": snapshot.model_dump(), "decision": decision.model_dump(mode="json")}
     except Exception as exc:
         raise HTTPException(status_code=502, detail="FX Brain analysis failed: " + str(exc)) from exc
