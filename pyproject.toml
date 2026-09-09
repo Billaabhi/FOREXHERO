@@ -1,0 +1,15 @@
+[project]
+name = "forexhero-fx-brain"
+version = "0.1.0"
+description = "FX BRAIN V1: evidence-driven GO / NO-GO / WAIT forex decision engine"
+requires-python = ">=3.11"
+dependencies = [
+  "openai-agents>=0.2.0",
+  "pydantic>=2.0",
+  "requests>=2.32",
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+]
+
+[project.scripts]
+fx-brain = "main:main"
