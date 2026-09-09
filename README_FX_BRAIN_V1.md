@@ -1,36 +1,66 @@
-# FX Brain V1
+# FX BRAIN V1
 
-Research-first Forex decision engine. V1 deliberately does **not** place live orders.
+Research-first Forex decision engine built on the existing FOREXHERO foundation.
 
-## Contract
+## Tonight's usable milestone
 
-The engine has exactly three decisions:
+`market data -> technical evidence -> macro specialist -> adversarial specialist -> deterministic risk gate -> GO / NO-GO / WAIT`
 
-- `GO` — setup passes the current gates.
-- `NO-GO` — setup is rejected by evidence or a hard risk veto.
-- `WAIT` — directional evidence is insufficient.
+V1 deliberately **does not place live orders**.
 
-## Initial universe
+### Supported pairs
 
 EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CAD, USD/CHF, NZD/USD.
 
+### Decision contract
+
+- `GO` — directional setup passes the hard gates.
+- `NO-GO` — directional idea exists but a risk/evidence veto blocks it.
+- `WAIT` — evidence is not sufficiently directional.
+
+Hard gates currently include confidence >= 70%, R:R >= 1.8, spread protection, extreme-volatility protection, and adversarial-risk protection.
+
 ## Architecture
 
-`market data -> feature engine -> strategy/expert views -> adversarial review -> deterministic risk gate -> decision -> trade ledger -> backtest/evaluation`
+- `fx_brain/data.py` — Twelve Data candle ingestion.
+- `fx_brain/indicators.py` — EMA, RSI, ATR, ADX, momentum and trend/volatility scoring.
+- `fx_brain/brain.py` — OpenAI Agents SDK specialist orchestration.
+- `fx_brain/decision.py` — deterministic technical vote and hard risk gate.
+- `fx_brain/models.py` — Pydantic market and trade contracts.
+- `main.py` — FastAPI `/health` and `/analyze` endpoints.
+- `tests/test_decision.py` — deterministic smoke tests.
 
-The LLM is an evidence synthesizer, not the source of truth for arithmetic, indicators, risk limits, or order permissions. Those remain deterministic code paths.
+The LLM synthesizes evidence; it does **not** own arithmetic, risk limits, or order permissions.
 
-## V1 safety boundary
+## Run
 
-No broker credentials. No live order endpoint. No autonomous execution.
+```bash
+uv run python main.py
+```
 
-## Next build slices
+Then call:
 
-1. Historical OHLC loader + canonical market schema.
-2. Technical feature engine: EMA, RSI, ATR, ADX, momentum, regime.
-3. Strategy modules: trend, momentum, breakout, mean reversion, carry placeholder.
-4. Macro/news adapter interfaces.
-5. OpenAI specialist agents with structured outputs.
-6. Adversarial agent + decision judge.
-7. Backtest engine with walk-forward evaluation and transaction-cost assumptions.
-8. Dashboard integration with the existing TradingView frontend.
+```bash
+curl -X POST http://localhost:8000/analyze \
+  -H 'content-type: application/json' \
+  -d '{"pair":"EUR/USD","timeframe":"1h"}'
+```
+
+Required environment variables:
+
+```text
+OPENAI_API_KEY
+TWELVE_DATA_API_KEY
+```
+
+## Safety boundary
+
+No broker credentials, no live order endpoint, and no autonomous execution in V1. Real-money execution is a later stage after backtesting and paper-trading validation.
+
+## Next slices
+
+1. Economic-calendar/news adapter with event lockout.
+2. Currency-strength matrix across the core seven currencies.
+3. Historical backtest + walk-forward evaluation.
+4. Trade ledger and outcome learning loop.
+5. Existing TradingView dashboard integration.
