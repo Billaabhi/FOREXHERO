@@ -41,6 +41,13 @@ class ExpertView(BaseModel):
     contradicts: List[str] = Field(default_factory=list)
 
 
+class AdversarialReview(BaseModel):
+    risk_score: float = Field(ge=0, le=100)
+    strongest_counterargument: str
+    failure_conditions: List[str] = Field(default_factory=list)
+    verdict: str
+
+
 class TradeDecision(BaseModel):
     pair: str
     decision: Decision
@@ -56,5 +63,7 @@ class TradeDecision(BaseModel):
     invalidation: str
     catalyst: str
     adversarial_score: float = Field(ge=0, le=1)
+    expert_views: List[ExpertView] = Field(default_factory=list)
+    adversarial_review: Optional[AdversarialReview] = None
     reasons: List[str] = Field(default_factory=list)
     vetoes: List[str] = Field(default_factory=list)
