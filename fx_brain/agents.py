@@ -1,4 +1,4 @@
-"""Compatibility exports for FX Brain specialist agents."""
+"""Public specialist exports for FX Brain."""
 
 from .brain import adversarial_agent, macro_agent
 
