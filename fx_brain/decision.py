@@ -1,4 +1,4 @@
-from .models import Decision, Direction, MarketSnapshot, TradeDecision
+from .models import AdversarialReview, Decision, Direction, ExpertView, MarketSnapshot, TradeDecision
 
 MIN_CONFIDENCE = 0.70
 MIN_RR = 1.8
@@ -38,15 +38,36 @@ def hard_risk_gate(snapshot: MarketSnapshot, confidence: float, risk_reward: flo
     return vetoes
 
 
-def decide(snapshot: MarketSnapshot, adversarial_score: float = 0.0, macro_score: float = 0.0) -> TradeDecision:
-    direction, raw = technical_vote(snapshot)
-    confidence = min(0.99, max(0.01, 0.50 + abs(raw) / 100 * 0.45 + macro_score / 500))
-    if adversarial_score >= 0.50:
-        confidence *= 0.85
+def decide(
+    snapshot: MarketSnapshot,
+    adversarial_score: float = 0.0,
+    macro_score: float = 0.0,
+    expert_views: list[ExpertView] | None = None,
+    adversarial_review: AdversarialReview | None = None,
+) -> TradeDecision:
+    direction, technical_score = technical_vote(snapshot)
+    alignment = abs(technical_score) / 100
+    macro_alignment = (macro_score / 100) * (1 if direction == Direction.LONG else -1 if direction == Direction.SHORT else 0)
+    confidence = 0.50 + 0.30 * alignment + 0.15 * max(0.0, min(1.0, (macro_alignment + 1) / 2))
+    confidence -= 0.18 * adversarial_score
+    confidence = min(0.99, max(0.01, confidence))
 
-    risk_reward = 2.0 if direction != Direction.FLAT else None
+    risk_reward = 2.0 if direction != Direction.FLAT and snapshot.atr else None
     vetoes = hard_risk_gate(snapshot, confidence, risk_reward, adversarial_score)
     decision = Decision.WAIT if direction == Direction.FLAT else (Decision.NO_GO if vetoes else Decision.GO)
+
+    stop_loss = None
+    take_profit = None
+    if direction == Direction.LONG and snapshot.atr:
+        stop_loss = snapshot.price - 1.5 * snapshot.atr
+        take_profit = snapshot.price + 3.0 * snapshot.atr
+    elif direction == Direction.SHORT and snapshot.atr:
+        stop_loss = snapshot.price + 1.5 * snapshot.atr
+        take_profit = snapshot.price - 3.0 * snapshot.atr
+
+    regime = "TRENDING" if abs(snapshot.trend_score) >= 40 else "RANGE/UNCLEAR"
+    if snapshot.volatility_score >= 60:
+        regime += " / HIGH VOL"
 
     return TradeDecision(
         pair=snapshot.pair,
@@ -54,15 +75,17 @@ def decide(snapshot: MarketSnapshot, adversarial_score: float = 0.0, macro_score
         direction=direction,
         confidence=confidence,
         entry=snapshot.price if decision == Decision.GO else None,
-        stop_loss=(snapshot.price - 1.5 * snapshot.atr if direction == Direction.LONG and snapshot.atr else snapshot.price + 1.5 * snapshot.atr if direction == Direction.SHORT and snapshot.atr else None),
-        take_profit=(snapshot.price + 3.0 * snapshot.atr if direction == Direction.LONG and snapshot.atr else snapshot.price - 3.0 * snapshot.atr if direction == Direction.SHORT and snapshot.atr else None),
+        stop_loss=stop_loss,
+        take_profit=take_profit,
         risk_reward=risk_reward,
         risk_percent=MAX_RISK if decision == Decision.GO else 0,
-        regime="TRENDING" if abs(snapshot.trend_score) >= 40 else "RANGE/UNCLEAR",
-        thesis="Technical and macro evidence support the selected direction." if direction != Direction.FLAT else "Evidence is not sufficiently directional.",
-        invalidation="Reversal through the structural setup or material new macro information.",
-        catalyst="Price/momentum confirmation and macro alignment.",
+        regime=regime,
+        thesis="Technical, macro and regime evidence support the selected direction." if direction != Direction.FLAT else "Evidence is not sufficiently directional.",
+        invalidation="A structural reversal, catalyst failure, or material macro change invalidates the thesis.",
+        catalyst="Price/momentum confirmation; macro catalyst must be verified by the live data adapters.",
         adversarial_score=adversarial_score,
-        reasons=[f"Technical score: {raw:.1f}", f"Macro score: {macro_score:.1f}"],
+        expert_views=expert_views or [],
+        adversarial_review=adversarial_review,
+        reasons=[f"Technical score: {technical_score:.1f}", f"Macro score: {macro_score:.1f}", f"Volatility score: {snapshot.volatility_score:.1f}"],
         vetoes=vetoes,
     )
